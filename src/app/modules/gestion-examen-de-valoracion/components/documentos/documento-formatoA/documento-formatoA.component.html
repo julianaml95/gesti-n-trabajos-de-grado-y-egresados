@@ -1,0 +1,364 @@
+<p-panel>
+    <div id="formatoA">
+        <div class="flex flex-column w-full mb-4 header-logo">
+            <img
+                src="assets/layout/images/asset-header.jpg"
+                alt="Asset Header"
+                class="header-image"
+            />
+            <div class="flex justify-content-start logo-container">
+                <img
+                    src="assets/layout/images/logoFacultad.png"
+                    alt="Logo Facultad"
+                    class="logo-image"
+                />
+            </div>
+        </div>
+        <div
+            class="flex flex-column w-full justify-content-center align-items-center row-gap-4"
+        >
+            <span style="font-size: 20px">
+                SOLICITUD EXAMEN DE VALORACION
+            </span>
+            <span> Popayán {{ fechaActual | date : "dd/MM/yyyy" }} </span>
+        </div>
+        <form class="mt-4" [formGroup]="formatoAForm">
+            <div class="flex flex-column gap-4">
+                <div class="field grid">
+                    <div
+                        class="col-2 col-label text-right mr-2 align-self-start"
+                    >
+                        <label
+                            class="label-required uppercase font-semibold"
+                            style="line-height: 1.5rem"
+                            >Asunto</label
+                        >
+                    </div>
+                    <div class="col-9 col-input">
+                        <textarea
+                            pInputTextarea
+                            [maxLength]="250"
+                            class="p-inputtextarea-md w-full"
+                            formControlName="asunto"
+                            [ngClass]="{
+                                'ng-invalid ng-dirty':
+                                    getFormControl('asunto').invalid &&
+                                    getFormControl('asunto').touched
+                            }"
+                        ></textarea>
+                    </div>
+                </div>
+                <div class="field grid">
+                    <div
+                        class="col-2 col-label text-right mr-2 align-self-start"
+                    >
+                        <label class="uppercase font-semibold">Titulo</label>
+                    </div>
+                    <div class="col-9 col-input">
+                        <textarea
+                            pInputTextarea
+                            [maxLength]="250"
+                            class="p-inputtextarea-md w-full"
+                            formControlName="titulo"
+                            readonly
+                        ></textarea>
+                    </div>
+                </div>
+                <div class="field grid">
+                    <div
+                        class="col-2 col-label text-right mr-2 align-self-start"
+                    >
+                        <label class="uppercase font-semibold"
+                            >Estudiante</label
+                        >
+                    </div>
+                    <div class="col-9 col-input">
+                        <input
+                            pInputText
+                            [maxLength]="250"
+                            class="p-inputtext-md w-full"
+                            formControlName="estudiante"
+                            readonly
+                        />
+                    </div>
+                </div>
+
+                <div class="field grid">
+                    <div
+                        class="col-2 col-label text-right mr-2 align-self-start"
+                    >
+                        <label class="label-required uppercase font-semibold"
+                            >Tutores y Asesores</label
+                        >
+                    </div>
+                    <div class="col-9 col-input flex flex-column row-gap-6">
+                        <div
+                            *ngFor="
+                                let orientador of orientadores;
+                                let i = index
+                            "
+                        >
+                            <div class="flex align-items-center">
+                                <p-card class="w-full max-w-30rem">
+                                    <div class="flex justify-content-between">
+                                        <span class="card-title"
+                                            >Docente
+                                            {{
+                                                orientador.tipo | lowercase
+                                            }}</span
+                                        >
+                                        <button
+                                            pButton
+                                            icon="pi pi-times"
+                                            style="
+                                                border: none;
+                                                font-size: 1.2rem;
+                                            "
+                                            (click)="limpiarOrientador(i)"
+                                        ></button>
+                                    </div>
+                                    <div
+                                        class="mt-2 card-data flex justify-content-between w-full"
+                                    >
+                                        <span>Nombres y Apellidos</span>
+                                        <span>{{ orientador.nombres }}</span>
+                                    </div>
+                                    <div
+                                        class="mt-2 card-data flex justify-content-between w-full"
+                                    >
+                                        <span>Correo</span>
+                                        <span>{{ orientador.correo }}</span>
+                                    </div>
+                                    <div
+                                        class="mt-2 card-data flex justify-content-between w-full"
+                                    >
+                                        <span>Rol</span>
+                                        <span>{{
+                                            orientador.rol | lowercase
+                                        }}</span>
+                                    </div>
+                                </p-card>
+                            </div>
+                        </div>
+                        <div
+                            class="flex align-items-center column-gap-4 btn-roles"
+                        >
+                            <p-dropdown
+                                [options]="roles"
+                                placeholder="Seleccione"
+                                styleClass="p-inputtext-md w-full max-w-35rem"
+                                formControlName="rol"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        getFormControl('rol').invalid &&
+                                        getFormControl('rol').touched
+                                }"
+                            ></p-dropdown>
+                            <p-dropdown
+                                [options]="tipos"
+                                placeholder="Seleccione"
+                                styleClass="p-inputtext-md w-full max-w-35rem"
+                                formControlName="tipo"
+                                [ngClass]="{
+                                    'ng-invalid ng-dirty':
+                                        getFormControl('tipo').invalid &&
+                                        getFormControl('tipo').touched
+                                }"
+                            ></p-dropdown>
+                            <button
+                                pButton
+                                icon="pi pi-plus"
+                                [label]="
+                                    'Seleccionar ' +
+                                    tipoSeleccionado.toLowerCase()
+                                "
+                                [disabled]="!tipoSeleccionado"
+                                (click)="
+                                    onSeleccionarOrientador(tipoSeleccionado)
+                                "
+                                style="white-space: nowrap; width: auto"
+                            ></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-column gap-2">
+                <div class="field grid gap-2">
+                    <div
+                        class="col-2 col-label text-right mr-2 align-self-start"
+                    >
+                        <label class="uppercase font-semibold"
+                            >Evaluador Externo</label
+                        >
+                    </div>
+                    <div
+                        class="col-9 col-input field-content"
+                        *ngIf="experto.value; else noEvaluadorSelected"
+                    >
+                        <div class="flex align-items-center">
+                            <p-card class="w-full max-w-30rem">
+                                <div class="flex justify-content-between">
+                                    <span class="card-title"
+                                        >Datos del Evaluador Externo</span
+                                    >
+                                </div>
+                                <div
+                                    class="mt-2 card-data flex justify-content-between"
+                                >
+                                    <span>Nombres y Apellidos</span>
+                                    <span>{{ experto?.value?.nombres }}</span>
+                                </div>
+                                <div
+                                    class="mt-2 card-data flex justify-content-between"
+                                >
+                                    <span>Universidad</span>
+                                    <span>{{
+                                        experto?.value?.universidad
+                                    }}</span>
+                                </div>
+                                <div
+                                    class="mt-2 card-data flex justify-content-between"
+                                >
+                                    <span>Correo</span>
+                                    <span>{{ experto?.value?.correo }}</span>
+                                </div>
+                            </p-card>
+                        </div>
+                    </div>
+                </div>
+                <div class="field grid gap-2">
+                    <div
+                        class="col-2 col-label text-right mr-2 align-self-start"
+                    >
+                        <label class="uppercase font-semibold"
+                            >Evaluador Interno</label
+                        >
+                    </div>
+                    <div
+                        class="col-9 col-input field-content"
+                        *ngIf="docente.value; else noEvaluadorSelected"
+                    >
+                        <div class="flex align-items-center">
+                            <p-card class="w-full max-w-30rem">
+                                <div class="flex justify-content-between">
+                                    <span class="card-title"
+                                        >Datos del Evaluador Interno</span
+                                    >
+                                </div>
+                                <div
+                                    class="mt-2 card-data flex justify-content-between"
+                                >
+                                    <span>Nombres y Apellidos</span>
+                                    <span>{{ docente?.value?.nombres }}</span>
+                                </div>
+                                <div
+                                    class="mt-2 card-data flex justify-content-between"
+                                >
+                                    <span>Universidad</span>
+                                    <span>{{
+                                        docente?.value?.universidad
+                                    }}</span>
+                                </div>
+                                <div
+                                    class="mt-2 card-data flex justify-content-between"
+                                >
+                                    <span>Correo</span>
+                                    <span>{{ docente?.value?.correo }}</span>
+                                </div>
+                            </p-card>
+                        </div>
+                    </div>
+                </div>
+                <div class="field grid">
+                    <span
+                        class="col-9 col-label--firma text-right align-self-start"
+                    >
+                        <b>Firma</b>
+                    </span>
+                    <div class="col-3 col-input--firma text-center">
+                        <p-fileUpload
+                            name="firmaTutor"
+                            chooseIcon="pi pi-file"
+                            accept=".png, .jpg, .jpeg"
+                            chooseLabel="Seleccionar"
+                            class="w-full max-w-30rem"
+                            previewWidth="100"
+                            [auto]="true"
+                            (onSelect)="onFirmaChange($event, 'firmaTutor')"
+                        >
+                            <ng-template
+                                let-file
+                                pTemplate="file"
+                                data-file="firma"
+                            >
+                                <div *ngIf="firmaTutor">
+                                    <img
+                                        [src]="firmaTutor"
+                                        alt="Vista Previa de la Firma"
+                                        style="
+                                            min-height: 120px;
+                                            min-width: 150px;
+                                            width: 100%;
+                                            height: 100%;
+                                        "
+                                    />
+                                </div>
+                            </ng-template>
+                        </p-fileUpload>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-logo mt-8">
+                <img
+                    src="assets/layout/images/asset-calidad.png"
+                    alt="Asset Calidad"
+                    width="140px"
+                    height="100px"
+                />
+                <div
+                    class="flex flex-column align-items-center justify-content-center"
+                >
+                    <span>
+                        Carrera 2 No. 15N esquina-Sector Tulcán
+                        Popayán-Cauca-Colombia Teléfono: 6028209800 ext. 2100 ó
+                        2101. decafiet@unicauca.edu.co |
+                        <strong>www.unicauca.edu.co</strong>
+                    </span>
+                </div>
+                <img
+                    src="assets/layout/images/logosIcontec.png"
+                    alt="Logo Icontec"
+                    width="120px"
+                    height="80px"
+                />
+            </div>
+            <div
+                class="flex align-items-center justify-content-end mt-4 column-gap-2"
+            >
+                <button
+                    pButton
+                    type="button"
+                    icon="pi pi-upload"
+                    label="Insertar"
+                    pTooltip="Haz clic para insertar el documento en el área de carga de archivos."
+                    tooltipPosition="top"
+                    (click)="onInsertar()"
+                ></button>
+                <button
+                    pButton
+                    type="button"
+                    icon="pi pi-download"
+                    label="Descargar"
+                    (click)="onDownload()"
+                    [loading]="loading"
+                ></button>
+            </div>
+        </form>
+    </div>
+    <ng-template #noEvaluadorSelected>
+        <p-fieldset
+            class="field-evaluador"
+            legend="Cargar Evaluador"
+        ></p-fieldset>
+    </ng-template>
+</p-panel>
