@@ -1,21 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as PizZip from 'pizzip';
 import * as JSZipUtils from 'pizzip/utils/index.js';
 import * as Docxtemplater from 'docxtemplater';
 import { Observable, catchError, of } from 'rxjs';
-
-pdfMake.fonts = {
-    Roboto: {
-        normal: `${window.location.origin}/assets/docs/fonts/Roboto-Regular.ttf`,
-        bold: `${window.location.origin}/assets/docs/fonts/Roboto-Bold.ttf`,
-        italics: `${window.location.origin}/assets/docs/fonts/Roboto-Italic.ttf`,
-        bolditalics: `${window.location.origin}/assets/docs/fonts/Roboto-BoldItalic.ttf`,
-    },
-    OpenSans: {
-        normal: `${window.location.origin}/assets/docs/fonts/OpenSans-Regular.ttf`,
-    },
-};
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Injectable({
     providedIn: 'root',
@@ -267,13 +257,12 @@ export class DocumentoFormatoCService {
                         {
                             stack: [
                                 {
-                                    text: 'Carrera 2 No. 15N esquina-Sector Tulcán\nPopayán-Cauca-Colombia\nTeléfono: 6028209800 ext. 2100 ó 2101\ndecafiet@unicauca.edu.co | www.unicauca.edu.co',
+                                    text: 'Carrera 2 No. 15N esquina-Sector Tulcán\nPopayán-Cauca-Colombia\nTeléfono: 6028209800 ext. 2100 ó 2101\ndecafiet&#64;unicauca.edu.co | www.unicauca.edu.co',
                                     alignment: 'center',
                                     fontSize: 8,
                                     color: '#1f497d',
                                     opacity: 0.6,
                                     margin: [-40, 20, 0, 0],
-                                    font: 'OpenSans',
                                 },
                             ],
                             width: '*',
@@ -295,9 +284,6 @@ export class DocumentoFormatoCService {
                     ],
                     margin: [40, -60, 0, 0],
                 };
-            },
-            defaultStyle: {
-                font: 'Roboto',
             },
             styles: {
                 header: {

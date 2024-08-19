@@ -1,4 +1,5 @@
 import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import {
     Component,
     ElementRef,
@@ -24,18 +25,7 @@ import {
     warnMessage,
 } from 'src/app/core/utils/message-util';
 import { TrabajoDeGradoService } from '../../../services/trabajoDeGrado.service';
-
-pdfMake.fonts = {
-    Roboto: {
-        normal: `${window.location.origin}/assets/docs/fonts/Roboto-Regular.ttf`,
-        bold: `${window.location.origin}/assets/docs/fonts/Roboto-Bold.ttf`,
-        italics: `${window.location.origin}/assets/docs/fonts/Roboto-Italic.ttf`,
-        bolditalics: `${window.location.origin}/assets/docs/fonts/Roboto-BoldItalic.ttf`,
-    },
-    OpenSans: {
-        normal: `${window.location.origin}/assets/docs/fonts/OpenSans-Regular.ttf`,
-    },
-};
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
     selector: 'documento-formatoResolucionComite',
@@ -384,13 +374,12 @@ export class DocumentoFormatoResolucionComiteComponent implements OnInit {
                         {
                             stack: [
                                 {
-                                    text: 'Carrera 2 No. 15N esquina-Sector Tulcán\nPopayán-Cauca-Colombia\nTeléfono: 6028209800 ext. 2100 ó 2101\ndecafiet@unicauca.edu.co | www.unicauca.edu.co',
+                                    text: 'Carrera 2 No. 15N esquina-Sector Tulcán\nPopayán-Cauca-Colombia\nTeléfono: 6028209800 ext. 2100 ó 2101\ndecafiet&#64;unicauca.edu.co | www.unicauca.edu.co',
                                     alignment: 'center',
                                     fontSize: 8,
                                     color: '#1f497d',
                                     opacity: 0.6,
                                     margin: [-40, 20, 0, 0],
-                                    font: 'OpenSans',
                                 },
                             ],
                             width: '*',
@@ -412,9 +401,6 @@ export class DocumentoFormatoResolucionComiteComponent implements OnInit {
                     ],
                     margin: [40, -60, 0, 0],
                 };
-            },
-            defaultStyle: {
-                font: 'Roboto',
             },
             styles: {
                 header: {
